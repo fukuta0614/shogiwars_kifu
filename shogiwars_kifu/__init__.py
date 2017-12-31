@@ -5,11 +5,10 @@ import time
 import os
 import argparse
 
-save_dir = '/Users/fukuta-mil/Documents/棋譜/将棋ウォーズ'
 URL = 'http://swks.sakura.ne.jp/wars/kifusearch/'
 
 
-def download_kifu(kifu_url):
+def download_kifu(kifu_url, save_dir):
     file_path = os.path.join(save_dir, os.path.basename(kifu_url))
     if os.path.exists(file_path):
         return False
@@ -31,7 +30,7 @@ def download_kifu(kifu_url):
                 exit()
 
 
-def get_kifu_from_wars(user_name, gtype='10', latest=False):
+def get_kifu_from_wars(user_name, gtype='10', save_dir='./', latest_only=False):
     print('username :', user_name)
     print('game type :', {'10': '10切れ', '3': '3切れ', '10s': '10秒'}[gtype])
     try_count = 0
@@ -61,17 +60,17 @@ def get_kifu_from_wars(user_name, gtype='10', latest=False):
 
     soup = BeautifulSoup(r.content, 'lxml')
     print('save kifu')
-    if latest:
+    if latest_only:
         tr = soup.findAll('tr')[0]
         kifu_url = urllib.parse.urljoin(URL, tr.findAll('a')[1]['href'])
         print(kifu_url)
-        res = download_kifu(kifu_url)
+        res = download_kifu(kifu_url, save_dir)
         c = 1 if res else 0
     else:
         c = 0
         for tr in soup.findAll('tr')[::-1]:
             kifu_url = urllib.parse.urljoin(URL, tr.findAll('a')[1]['href'])
-            res = download_kifu(kifu_url)
+            res = download_kifu(kifu_url, save_dir)
             if res:
                 c += 1
     print('get {} new kifu'.format(c))
@@ -81,6 +80,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('user_name')
     parser.add_argument('-t', '--game_type', choices=['10', '3', '10s'], default='10')
+    parser.add_argument('-d', '--save_dir', default='./')
     args = parser.parse_args()
 
-    get_kifu_from_wars(args.user_name, gtype=args.game_type)
+    get_kifu_from_wars(args.user_name, gtype=args.game_type, save_dir=args.save_dir)
