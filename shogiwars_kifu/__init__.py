@@ -78,11 +78,13 @@ def get_kifu_from_wars(user_name, game_info, save_dir='./', latest_only=False):
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('user_name')
-    parser.add_argument('-t', '--game_type', choices=['10', '3', '10s', 'all'], default='all')
-    parser.add_argument('-d', '--save_dir', default='./')
-    parser.add_argument('-l', '--latest', action='store_true', default=False)
+    parser = argparse.ArgumentParser(description='kifu downloader from shogiwars')
+    parser.add_argument('user_name', help='user name (required)')
+    parser.add_argument('-t', '--game_type', choices=['10', '3', '10s', 'all'], default='all',
+                        help='game type exist in shogiwars')
+    parser.add_argument('-d', '--save_dir', default='./', help='location where kifu files are downloaded')
+    parser.add_argument('-l', '--latest', action='store_true', default=False,
+                        help='if True, only the latest kifu file will be downloaded')
     args = parser.parse_args()
 
     game_info_dict = {'10': ('10切れ', 0), '3': ('3切れ', 1), '10s': ('10秒', 1)}
