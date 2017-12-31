@@ -30,9 +30,10 @@ def download_kifu(kifu_url, save_dir):
                 exit()
 
 
-def get_kifu_from_wars(user_name, gtype='10', save_dir='./', latest_only=False):
+def get_kifu_from_wars(user_name, game_info, save_dir='./', latest_only=False):
+    game_type_description, gtype = game_info
     print('username :', user_name)
-    print('game type :', {'10': '10切れ', '3': '3切れ', '10s': '10秒'}[gtype])
+    print('game type :', game_type_description)
     try_count = 0
     while True:
         try:
@@ -59,7 +60,7 @@ def get_kifu_from_wars(user_name, gtype='10', save_dir='./', latest_only=False):
                 exit()
 
     soup = BeautifulSoup(r.content, 'lxml')
-    print('save kifu')
+    print('start saving kifu ...')
     if latest_only:
         tr = soup.findAll('tr')[0]
         kifu_url = urllib.parse.urljoin(URL, tr.findAll('a')[1]['href'])
@@ -79,8 +80,18 @@ def get_kifu_from_wars(user_name, gtype='10', save_dir='./', latest_only=False):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('user_name')
-    parser.add_argument('-t', '--game_type', choices=['10', '3', '10s'], default='10')
+    parser.add_argument('-t', '--game_type', choices=['10', '3', '10s', 'all'], default='all')
     parser.add_argument('-d', '--save_dir', default='./')
+    parser.add_argument('-l', '--latest', action='store_true', default=False)
     args = parser.parse_args()
 
-    get_kifu_from_wars(args.user_name, gtype=args.game_type, save_dir=args.save_dir)
+    game_info_dict = {'10': ('10切れ', 0), '3': ('3切れ', 1), '10s': ('10秒', 1)}
+
+    if args.game_type == 'all':
+        for game_type in ['10', '3', '10s']:
+            game_info = game_info_dict[game_type]
+            get_kifu_from_wars(args.user_name, game_info=game_info, save_dir=args.save_dir,
+                               latest_only=args.latest)
+    else:
+        game_info = game_info_dict[args.game_type]
+        get_kifu_from_wars(args.user_name, game_info=game_info, save_dir=args.save_dir, latest_only=args.latest)
