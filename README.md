@@ -7,3 +7,9 @@
 ```sh
 pip install git+https://github.com/fukuta0614/shogiwars_kifu.git 
 ```
+
+### Usage
+
+```sh
+shogiwars_kifu [OPTION] USER_NAME
+```
