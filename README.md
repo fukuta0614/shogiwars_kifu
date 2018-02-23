@@ -4,12 +4,16 @@
 
 ### Installation
 
-```sh
-pip install git+https://github.com/fukuta0614/shogiwars_kifu.git 
-```
+    pip install git+https://github.com/fukuta0614/shogiwars_kifu.git 
 
 ### Usage
 
-```sh
-shogiwars_kifu [OPTION] USER_NAME
-```
+    shogiwars_kifu [-h] [-t {10,3,10s,all}] [-d SAVE_DIR] [-l] user_name
+
+#### Options
+    -h, --help              show this help message and exit
+    -t {10,3,10s,all}, --game_type {10,3,10s,all}
+                            game type of shogiwars
+    -d SAVE_DIR, --save_dir SAVE_DIR
+                            location where kifu files are downloaded
+    -l, --latest            if True, only the latest kifu file will be downloaded

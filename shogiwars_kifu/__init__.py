@@ -97,3 +97,6 @@ def main():
     else:
         game_info = game_info_dict[args.game_type]
         get_kifu_from_wars(args.user_name, game_info=game_info, save_dir=args.save_dir, latest_only=args.latest)
+
+if __name__ == '__main__':
+    main()
